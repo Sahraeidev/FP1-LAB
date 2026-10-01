@@ -20,6 +20,6 @@ def test_ha_ganado():
 
 
 test_normalizar() #es bien
-#test_enmascarar()
-#test_ha_ganado()
+test_enmascarar()
+test_ha_ganado()
 print("✅ Todas las pruebas han pasado correctamente.")

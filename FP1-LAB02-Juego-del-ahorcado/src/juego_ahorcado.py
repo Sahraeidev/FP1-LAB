@@ -16,7 +16,6 @@ def elige_palabra(fichero="palabras.txt"):
     palabras = [linea.strip() for linea in lineas if linea.strip() != ""]
     return random.choice(palabras)
 
-
 def normalizar(cadena):
 
     cadena = cadena.lower()
@@ -36,43 +35,73 @@ def normalizar(cadena):
 
     return cadena
 
-
 def enmascarar(palabra_secreta, letras_usadas=""):
-    cadena_devuelto = palabra_secreta.len() * "_" 
-    for letra in 
-    '''Devuelve una cadena de texto con la palabra enmascarada. 
-    Las letras que no están en letras_usadas se muestran como guiones bajos (_).
+    cadena_devuelto = ""     
+    n = 0
+    for letra in palabra_secreta :
+        if letra in letras_usadas:
+            cadena_devuelto+=letra
+        else:
+            cadena_devuelto+="_" 
+        n+=1
 
-    Parámetros:
-    - palabra_secreta: cadena de texto con la palabra que se debe enmascarar
-    - letras_usadas: cadena de texto con las letras que se deben mostrar (por defecto cadena vacía)
-
-    Devuelve:
-      Cadena de texto con la palabra enmascarada
-    '''
-    # TODO: Implementa esta función (y elimina la instrucción pass)
-    pass
-
+    return cadena_devuelto
 
 def ha_ganado(palabra_enmascarada):
 
+    for letra in palabra_enmascarada:
+        if letra == "_":
+            return False
+    return True
+    
+def mostrar_estado(palabra_enmascarada,letras_usadas,numero_intentos):
+    print(">>ESTADO DEL JUGADOR<<")
+    show_palabra_enmascarada = " ".join(palabra_enmascarada)
+    print(">>Estado de la palabra : ",show_palabra_enmascarada)
+    if len(letras_usadas) == 0 :
+        print(">>Letras usados : ninguna")
+    else:
+        print(">>Letras usados : ",letras_usadas)
+    print(">>Numero de intentos : ",numero_intentos)
 
-    '''Devuelve True si el jugador ha ganado (es decir, si no quedan letras por descubrir en la palabra enmascarada).
+def pedir_letra(letras_usadas):
+    letra_res = ""
+    while letra_res == "":
+        letra = input(">>Entre una letra :")
+        if len(letra) != 1 : 
+            print(">>Debes introducir una única letra")
+            continue
+        elif letra in letras_usadas:
+            print(">>Esa letra ya la has usado anteriormente")
+            continue
+        elif letra in "1234567890/-=+%^&*!?":
+            print(">>Debes introducir una letra")
+            continue
+        else : 
+            letra_res = letra
+    return letra_res
 
-    Parámetros:
-    - palabra_enmascarada: cadena de texto con la palabra enmascarada 
+def jugar(palabra_secreta,max_intentos=6) : 
+    if palabra_secreta == "":
+        print(">>no hay una palabra secreta!")
+        return
 
-    Devuelve:
-    - True si el jugador ha ganado, False en caso contrario
-    '''
-    # TODO: Implementa esta función (y elimina la instrucción pass)
-    pass
+    letras_usadas = ""
+    palabra_secreta = normalizar(palabra_secreta)
+    palabra_enmascarado = enmascarar(palabra_secreta,letras_usadas)
+    intentos = max_intentos
 
 
-# TODO: Implementa la función mostrar_estado
+    while intentos<=max_intentos :
+        mostrar_estado(palabra_enmascarado,letras_usadas,intentos)
+        letras_usadas+=pedir_letra(letras_usadas)
+        palabra_enmascarado = enmascarar(palabra_secreta,letras_usadas)
+        if ha_ganado(palabra_enmascarado) :
+            print(">>El jugador ha ganado!")
+            print(">>La palabra era : ",palabra_secreta)
+            break
+        else :
+            print(">>El jugador todavia no ha ganado!")
+            intentos+=1
 
-# TODO: Implementa la función pedir_letra
-
-# TODO: Implementa la función jugar
-
-# TODO: Escribe el programa principal
+jugar(elige_palabra("palabras.txt"))
